@@ -1,21 +1,29 @@
 package nl.jqno.module;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.junit.jupiter.api.Test;
+import static nl.jqno.module.Helper.*;
 
 import java.text.AttributedString;
 import java.util.Objects;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import org.junit.jupiter.api.Test;
+
 public class JdkTest {
     @Test
     void jdkClassHaver() {
-        EqualsVerifier.forClass(JdkClassHaver.class).verify();
+        assertDependencyIsInaccessible(
+            AttributedString.class,
+            () -> EqualsVerifier.forClass(JdkClassHaver.class).verify());
     }
 
     @Test
     void jdkClass() {
-        EqualsVerifier.forClass(AttributedString.class).verify();
+        assertSutIsInaccessible(
+            () -> EqualsVerifier
+                    .forClass(AttributedString.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify());
     }
 
     static final class JdkClassHaver {

@@ -1,8 +1,9 @@
 package nl.jqno.module;
 
+import static nl.jqno.module.Helper.*;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.module.recordinternal.RecordValue;
-
 import org.junit.jupiter.api.Test;
 
 public class RecordTest {
@@ -13,18 +14,21 @@ public class RecordTest {
 
     @Test
     void valueHaverPlain() {
-        EqualsVerifier.forClass(RecordValueHaver.class).verify();
+        assertDependencyIsInaccessible(
+            RecordValue.class,
+            () -> EqualsVerifier.forClass(RecordValueHaver.class).verify());
     }
 
     @Test
     void valueHaverPrefab() {
-        EqualsVerifier.forClass(RecordValueHaver.class)
-            .withPrefabValues(RecordValue.class, new RecordValue("a"), new RecordValue("b"))
-            .verify();
+        EqualsVerifier
+                .forClass(RecordValueHaver.class)
+                .withPrefabValues(RecordValue.class, new RecordValue("a"), new RecordValue("b"))
+                .verify();
     }
 
     @Test
     void value() {
-        EqualsVerifier.forClass(RecordValue.class).verify();
+        assertSutIsInaccessible(() -> EqualsVerifier.forClass(RecordValue.class).verify());
     }
 }
